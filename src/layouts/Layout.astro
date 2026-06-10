@@ -1,0 +1,82 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Guillaume Moultson — Développeur Web Back-end. Symfony, APIs, architecture.' } = Astro.props;
+const fullTitle = title === 'Guillaume Moultson' ? title : `${title} — Guillaume Moultson`;
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{fullTitle}</title>
+  </head>
+  <body>
+    <slot />
+    <script>
+      import gsap from 'gsap';
+      import { ScrollTrigger } from 'gsap/ScrollTrigger';
+      import Lenis from 'lenis';
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      const lenis = new Lenis({
+        duration: 1.1,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      });
+
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+
+      const reveals = document.querySelectorAll('[data-reveal]');
+      reveals.forEach((el) => {
+        gsap.to(el, {
+          opacity: 1,
+          x: 0,
+          y: 0,
+          scale: 1,
+          duration: 0.9,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 88%',
+            toggleActions: 'play none none none',
+          },
+        });
+      });
+
+      gsap.from('.hero-title', {
+        opacity: 0,
+        y: 48,
+        duration: 1.1,
+        ease: 'power3.out',
+        delay: 0.2,
+      });
+
+      gsap.from('.hero-sub', {
+        opacity: 0,
+        y: 24,
+        duration: 0.9,
+        ease: 'power3.out',
+        delay: 0.5,
+      });
+
+      gsap.from('.hero-cta', {
+        opacity: 0,
+        y: 16,
+        duration: 0.8,
+        ease: 'power3.out',
+        delay: 0.75,
+      });
+    </script>
+  </body>
+</html>

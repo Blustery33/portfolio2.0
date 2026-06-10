@@ -1,0 +1,86 @@
+---
+import type { Project } from '../data/projects';
+
+interface Props {
+  project: Project;
+  index: number;
+}
+
+const { project, index } = Astro.props;
+const badgeClass = `badge--${project.badge}`;
+---
+
+<article class="quest-card ornate-frame" data-reveal style={`transition-delay: ${index * 0.1}s`}>
+  <div class="quest-card__header">
+    <span class={`badge ${badgeClass}`}>{project.badgeLabel}</span>
+    <span class="quest-card__num">Projet {String(index + 1).padStart(2, '0')}</span>
+  </div>
+  <h3 class="quest-card__title">{project.title}</h3>
+  <p class="quest-card__subtitle">{project.subtitle}</p>
+  <p class="quest-card__teaser">{project.teaser}</p>
+  <div class="quest-card__stack">
+    {project.stack.map((tech) => (
+      <span class="stack-tag">{tech}</span>
+    ))}
+  </div>
+  <a href={`/projets/${project.slug}`} class="btn quest-card__cta">
+    Voir le projet →
+  </a>
+</article>
+
+<style>
+  .quest-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    transition: transform 0.35s var(--ease-out), box-shadow 0.35s;
+  }
+
+  .quest-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px var(--shadow), 0 0 24px rgba(45, 212, 191, 0.12);
+  }
+
+  .quest-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .quest-card__num {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--gold);
+    opacity: 0.6;
+  }
+
+  .quest-card__title {
+    font-size: 1.8rem;
+    color: var(--teal-bright);
+  }
+
+  .quest-card__subtitle {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--parchment-dark);
+    letter-spacing: 0.04em;
+  }
+
+  .quest-card__teaser {
+    color: var(--parchment);
+    opacity: 0.85;
+    flex: 1;
+    font-size: 0.95rem;
+  }
+
+  .quest-card__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .quest-card__cta {
+    align-self: flex-start;
+    margin-top: 0.5rem;
+  }
+</style>

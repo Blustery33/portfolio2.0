@@ -1,0 +1,69 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Message envoyé" description="Votre message a bien été envoyé.">
+  <Header />
+
+  <main class="merci-page">
+    <div class="merci-page__bg" aria-hidden="true"></div>
+    <div class="container merci">
+      <div class="merci__box ornate-frame" data-reveal="scale">
+        <p class="section-label">Contact</p>
+        <h1 class="merci__title">Message envoyé</h1>
+        <p class="merci__text">
+          Merci pour votre message. Je vous répondrai dès que possible
+          à l'adresse que vous avez indiquée.
+        </p>
+        <a href="/" class="btn btn--filled">Retour à l'accueil</a>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .merci-page {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 7rem 0 4rem;
+  }
+
+  .merci-page__bg {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 20%, rgba(45, 212, 191, 0.14) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 30% at 80% 80%, rgba(232, 93, 32, 0.08) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .merci {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+
+  .merci__box {
+    max-width: 520px;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .merci__title {
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    color: var(--teal-bright);
+    margin-bottom: 1rem;
+  }
+
+  .merci__text {
+    color: var(--parchment-dark);
+    margin-bottom: 2rem;
+    line-height: 1.7;
+  }
+</style>

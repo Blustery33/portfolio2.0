@@ -1,0 +1,92 @@
+---
+import { social } from '../data/social';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="footer__inner container">
+    <p class="footer__copy">© {year} Guillaume Moultson</p>
+    <div class="footer__links">
+      <a href={social.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="footer__icon-link">
+        <img src={social.icons.github} alt="" width="24" height="24" loading="lazy" />
+      </a>
+      <a href={social.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="footer__icon-link">
+        <img src={social.icons.linkedin} alt="" width="24" height="24" loading="lazy" />
+      </a>
+      <span aria-hidden="true" class="footer__sep">·</span>
+      <a href={`mailto:${social.email}`} class="footer__email">{social.email}</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding: 2.5rem 0 3rem;
+    border-top: 1px solid rgba(45, 212, 191, 0.18);
+    margin-top: 4rem;
+  }
+
+  .footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .footer__copy {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--parchment-dark);
+    opacity: 0.7;
+  }
+
+  .footer__links {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .footer__icon-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0.45rem;
+    background: #ffffff;
+    border: 1px solid rgba(45, 212, 191, 0.2);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+
+  .footer__icon-link img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+  }
+
+  .footer__icon-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(45, 212, 191, 0.18);
+  }
+
+  .footer__sep {
+    color: var(--teal-bright);
+    opacity: 0.35;
+  }
+
+  .footer__email {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--parchment-dark);
+    text-decoration: none;
+    transition: color 0.25s;
+  }
+
+  .footer__email:hover {
+    color: var(--teal-bright);
+  }
+</style>

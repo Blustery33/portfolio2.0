@@ -1,0 +1,602 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getFeaturedProjects } from '../data/projects';
+import { skills } from '../data/skills';
+import SkillTile from '../components/SkillTile.astro';
+import { social } from '../data/social';
+import { highlightKeywords } from '../utils/highlightKeywords';
+
+const featuredProjects = getFeaturedProjects();
+
+const aboutParagraphs = [
+  "Développeur Full Stack orienté back-end, je conçois des architectures fiables, des APIs et des services métier pensés pour la production. Actuellement chez Programisto pour le client Dream Yacht Charter, j'interviens sur l'optimisation des performances, la recherche avancée et les intégrations externes.",
+  "Avant ça, deux ans chez YouSchool : développement de back-offices, gestion de données, interfaces dynamiques et connexion à des services tiers. Je continue de me former en continu pour élargir mon spectre technique.",
+  "Pair programming, rigueur et sens de la logique — des qualités nourries autant par le travail en équipe de développement que par mon parcours à la Police Nationale.",
+];
+
+const pillars = [
+  {
+    icon: '>_',
+    title: 'Full Stack',
+    text: 'Passionné par le code, je construis des applications solides du back-end à l’interface. Chaque projet est l’occasion d’allier rigueur technique, performance et qualité.',
+  },
+  {
+    icon: '⚑',
+    title: "Travail d'équipe",
+    text: "Pair programming, conseiller, partager et apprendre des autres sont pour moi les clés d'un travail bien structuré.",
+  },
+  {
+    icon: '◈',
+    title: 'Logique',
+    text: "De nature logique, je sais m'adapter à n'importe quel code en toutes circonstances — l'une de mes meilleures forces.",
+  },
+];
+---
+
+<Layout title="Guillaume Moultson">
+  <Header />
+
+  <main>
+    <!-- Hero -->
+    <section class="hero" id="accueil">
+      <div class="hero__bg" aria-hidden="true"></div>
+      <div class="hero__content container">
+        <p class="section-label hero-label">Développeur Web · Back-end</p>
+        <h1 class="hero-title">Guillaume Moultson</h1>
+        <p class="hero-sub">Développeur Web <em>Back-end</em></p>
+        <p class="hero-desc">
+          Développeur Full Stack passionné, je construis des architectures solides,
+          des APIs performantes et des systèmes fiables. Performance, qualité, craft.
+        </p>
+        <div class="hero-cta">
+          <a href="#projets" class="btn btn--filled">Voir mes projets</a>
+          <a href="#contact" class="btn">Me contacter</a>
+        </div>
+        <div class="hero__stats" data-reveal>
+          <div class="hero__stat">
+            <span class="hero__stat-val">4+</span>
+            <span class="hero__stat-label">ans d'expérience</span>
+          </div>
+          <div class="hero__stat">
+            <span class="hero__stat-val">Full Stack</span>
+            <span class="hero__stat-label">profil</span>
+          </div>
+          <div class="hero__stat">
+            <span class="hero__stat-val">Bordeaux</span>
+            <span class="hero__stat-label">mobile</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero__scroll-hint" aria-hidden="true">
+        <span>Scroll</span>
+        <span class="hero__scroll-line"></span>
+      </div>
+    </section>
+
+    <!-- Pillars -->
+    <section class="section pillars" id="profil">
+      <div class="container">
+        <div class="pillars__grid">
+          {pillars.map((pillar, i) => (
+            <article class="pillar ornate-frame" data-reveal style={`transition-delay: ${i * 0.12}s`}>
+              <span class="pillar__icon" aria-hidden="true">{pillar.icon}</span>
+              <h2 class="pillar__title">{pillar.title}</h2>
+              <p class="pillar__text">{pillar.text}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section class="section skills" id="competences">
+      <div class="container">
+        <p class="section-label" data-reveal>Expertise</p>
+        <h2 class="section-title" data-reveal>Compétences</h2>
+        <p class="skills__intro" data-reveal>
+          Mon socle technique au quotidien : back-end, APIs, données et outils
+          avec lesquels je construis et maintiens des applications en production.
+        </p>
+        <div class="skills__grid">
+          {skills.map((skill, i) => (
+            <SkillTile skill={skill} index={i} />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section class="section quests" id="projets">
+      <div class="container">
+        <p class="section-label" data-reveal>Réalisations</p>
+        <h2 class="section-title" data-reveal>Projets</h2>
+        <p class="quests__intro" data-reveal>
+          Une sélection de projets pro et personnels. Cliquez pour découvrir l'architecture,
+          les défis techniques et ma contribution back-end.
+        </p>
+        <div class="quests__grid">
+          {featuredProjects.map((project, i) => (
+            <ProjectCard project={project} index={i} />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="section guild" id="a-propos">
+      <div class="container">
+        <div class="guild__layout">
+          <div class="guild__text" data-reveal="left">
+            <p class="section-label">Parcours</p>
+            <h2 class="section-title">À propos</h2>
+            {aboutParagraphs.map((paragraph) => (
+              <p set:html={highlightKeywords(paragraph)} />
+            ))}
+          </div>
+          <div class="guild__panel ornate-frame" data-reveal="right">
+            <h3 class="guild__panel-title">Stack & outils</h3>
+            <ul class="guild__list">
+              <li><span>·</span> Symfony 6+ / PHP 8</li>
+              <li><span>·</span> APIs REST & intégrations tierces</li>
+              <li><span>·</span> Java / Spring Boot</li>
+              <li><span>·</span> Docker / DDEV / CI</li>
+              <li><span>·</span> PostgreSQL / MySQL</li>
+              <li><span>·</span> Elasticsearch / OpenSearch</li>
+            </ul>
+            <div class="guild__interests">
+              <p class="guild__interests-label">Passions</p>
+              <span class="stack-tag">Jeux vidéo</span>
+              <span class="stack-tag">Montage PC</span>
+              <span class="stack-tag">Moto</span>
+              <span class="stack-tag">Tennis</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section contact" id="contact">
+      <div class="container">
+        <div class="contact__box ornate-frame" data-reveal="scale">
+          <p class="section-label">Restons en contact</p>
+          <h2 class="section-title">Contact</h2>
+          <p class="contact__text">
+            Intéressé par mon profil ? Envoyez-moi un message ou retrouvez-moi sur les réseaux.
+          </p>
+          <form
+            class="contact__form"
+            name="contact"
+            method="POST"
+            action="/merci/"
+            data-netlify="true"
+            data-netlify-honeypot="bot-field"
+          >
+            <input type="hidden" name="form-name" value="contact" />
+            <p class="contact__honeypot">
+              <label>Ne pas remplir : <input name="bot-field" /></label>
+            </p>
+            <div class="contact__fields">
+              <label class="contact__field">
+                <span>Nom</span>
+                <input type="text" name="name" required />
+              </label>
+              <label class="contact__field">
+                <span>Email</span>
+                <input type="email" name="email" required />
+              </label>
+            </div>
+            <label class="contact__field">
+              <span>Message</span>
+              <textarea name="message" rows="4" required></textarea>
+            </label>
+            <button type="submit" class="btn btn--filled">Envoyer le message</button>
+          </form>
+          <div class="contact__alt">
+            <a href={`mailto:${social.email}`}>{social.email}</a>
+            <span>·</span>
+            <a href={social.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+            <span>·</span>
+            <a href={social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 8rem 0 6rem;
+    overflow: hidden;
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 55% at 65% 15%, rgba(45, 212, 191, 0.22) 0%, transparent 60%),
+      radial-gradient(ellipse 45% 35% at 15% 75%, rgba(232, 93, 32, 0.12) 0%, transparent 50%),
+      radial-gradient(ellipse 55% 45% at 50% 50%, rgba(26, 138, 122, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero__bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(45, 212, 191, 0.02) 2px,
+      rgba(45, 212, 191, 0.02) 4px
+    );
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-label {
+    margin-bottom: 1rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2.75rem, 7vw, 5rem);
+    color: var(--parchment);
+    text-shadow: 0 0 48px rgba(45, 212, 191, 0.15), 0 2px 40px var(--shadow);
+    margin-bottom: 0.25rem;
+  }
+
+  .hero-sub {
+    font-family: var(--font-mono);
+    font-size: clamp(1rem, 2.5vw, 1.35rem);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--teal-bright);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-sub em {
+    font-style: normal;
+    color: var(--ember);
+  }
+
+  .hero-desc {
+    max-width: 520px;
+    color: var(--parchment-dark);
+    margin-bottom: 2rem;
+    font-size: 1.12rem;
+    line-height: 1.75;
+  }
+
+  .hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .hero__stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(45, 212, 191, 0.2);
+  }
+
+  .hero__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .hero__stat-val {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--teal-bright);
+  }
+
+  .hero__stat-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--parchment-dark);
+    opacity: 0.7;
+  }
+
+  .hero__scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal-bright);
+    opacity: 0.5;
+  }
+
+  .hero__scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--teal-bright), transparent);
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollLine {
+    0%, 100% { transform: scaleY(0.3); opacity: 0.3; }
+    50% { transform: scaleY(1); opacity: 1; }
+  }
+
+  .section {
+    padding: clamp(4rem, 10vw, 7rem) 0;
+  }
+
+  .pillars {
+    padding-top: 3rem;
+    margin-top: 0;
+    background: rgba(45, 212, 191, 0.03);
+  }
+
+  .skills {
+    background: rgba(26, 138, 122, 0.06);
+  }
+
+  .quests {
+    background: rgba(232, 93, 32, 0.03);
+  }
+
+  .guild {
+    background: rgba(45, 212, 191, 0.025);
+  }
+
+  .pillars__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .pillar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    transition: transform 0.35s var(--ease-out);
+  }
+
+  .pillar:hover {
+    transform: translateY(-3px);
+  }
+
+  .pillar__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--teal-bright);
+    border: 1px solid rgba(45, 212, 191, 0.35);
+    background: rgba(45, 212, 191, 0.08);
+    box-shadow: 0 0 12px rgba(45, 212, 191, 0.12);
+  }
+
+  .pillar__title {
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    font-weight: 600;
+    color: var(--teal-bright);
+  }
+
+  .pillar__text {
+    font-size: 1.08rem;
+    color: var(--parchment-dark);
+    line-height: 1.7;
+  }
+
+  .skills__intro {
+    max-width: 560px;
+    color: var(--parchment-dark);
+    margin-bottom: 2.5rem;
+    font-size: 1.12rem;
+    line-height: 1.75;
+  }
+
+  .skills__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .quests__intro {
+    max-width: 560px;
+    color: var(--parchment-dark);
+    margin-bottom: 2.5rem;
+  }
+
+  .quests__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.75rem;
+  }
+
+  .guild__layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+
+  .guild__text p {
+    margin-bottom: 1.25rem;
+    color: var(--parchment-dark);
+  }
+
+  .guild__text :global(.kw) {
+    color: var(--teal-bright);
+    font-weight: 600;
+  }
+
+  .guild__panel-title {
+    font-size: 1.4rem;
+    color: var(--gold-bright);
+    margin-bottom: 1.25rem;
+  }
+
+  .guild__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .guild__list li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--parchment-dark);
+  }
+
+  .guild__list span {
+    color: var(--gold);
+  }
+
+  .guild__interests {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    align-items: center;
+  }
+
+  .guild__interests-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    width: 100%;
+    margin-bottom: 0.25rem;
+  }
+
+  .contact__box {
+    max-width: 640px;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .contact__text {
+    color: var(--parchment-dark);
+    margin-bottom: 2rem;
+  }
+
+  .contact__form {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .contact__honeypot {
+    display: none;
+  }
+
+  .contact__fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .contact__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .contact__field span {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .contact__field input,
+  .contact__field textarea {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    padding: 0.65rem 0.85rem;
+    background: var(--ink-mid);
+    border: 1px solid rgba(45, 212, 191, 0.3);
+    color: var(--parchment);
+    border-radius: 2px;
+    transition: border-color 0.25s;
+  }
+
+  .contact__field input:focus,
+  .contact__field textarea:focus {
+    outline: none;
+    border-color: var(--teal-bright);
+    box-shadow: 0 0 12px rgba(45, 212, 191, 0.15);
+  }
+
+  .contact__alt {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .contact__alt span {
+    color: var(--gold);
+    opacity: 0.4;
+  }
+
+  @media (max-width: 768px) {
+    .skills__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .pillars__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .guild__layout {
+      grid-template-columns: 1fr;
+    }
+
+    .contact__fields {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .skills__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
