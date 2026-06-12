@@ -36,6 +36,7 @@ const KEYWORDS = [
   'CI/CD',
   'Agile',
   'recherche avancée',
+  'logique métier',
   'services métier',
   'services tiers',
   'intégrations externes',

@@ -12,9 +12,10 @@ import { highlightKeywords } from '../utils/highlightKeywords';
 const featuredProjects = getFeaturedProjects();
 
 const aboutParagraphs = [
-  "Développeur Full Stack orienté back-end, je conçois des architectures fiables, des APIs et des services métier pensés pour la production. Actuellement chez Programisto pour le client Dream Yacht Charter, j'interviens sur l'optimisation des performances, la recherche avancée et les intégrations externes.",
-  "Avant ça, deux ans chez YouSchool : développement de back-offices, gestion de données, interfaces dynamiques et connexion à des services tiers. Je continue de me former en continu pour élargir mon spectre technique.",
-  "Pair programming, rigueur et sens de la logique — des qualités nourries autant par le travail en équipe de développement que par mon parcours à la Police Nationale.",
+  "Développeur Full Stack, avec une préférence marquée pour le back-end, j'aime travailler sur la structure des projets : modélisation des données, logique métier, services applicatifs et intégration d'APIs externes.",
+  "Depuis début 2025, je travaille chez Programisto pour Dream Yacht Charter. Je développe des services en PHP, j'ai mis en place des services tiers comme OpenSearch pour la gestion et la récupération des données, et j'interviens sur l'intégration d'APIs externes comme Nausys et HubSpot.",
+  "Entre 2021 et 2023, j'ai travaillé chez YouSchool sur un CRM interne en Symfony. J'y ai développé des fonctionnalités back-office, des interfaces Twig et des outils métier utilisés au quotidien par les équipes.",
+  "Avant ma reconversion dans le développement web, j'ai passé deux ans comme adjoint de sécurité à la Police Nationale. Cette expérience m'a appris à être rigoureux, à respecter les procédures et à garder le cap sous pression. Aujourd'hui, je retrouve ces réflexes dans mon travail de développeur, en équipe Agile, avec du pair programming au quotidien.",
 ];
 
 const pillars = [
@@ -124,26 +125,30 @@ const pillars = [
     <!-- About -->
     <section class="section guild" id="a-propos">
       <div class="container">
-        <div class="guild__layout">
-          <div class="guild__text" data-reveal="left">
-            <p class="section-label">Parcours</p>
-            <h2 class="section-title">À propos</h2>
-            {aboutParagraphs.map((paragraph) => (
-              <p set:html={highlightKeywords(paragraph)} />
-            ))}
+        <div class="guild__layout" data-reveal>
+          <p class="section-label">Parcours</p>
+          <h2 class="section-title">À propos</h2>
+
+          <div class="guild__row">
+            <div class="guild__text">
+              {aboutParagraphs.map((paragraph) => (
+                <p set:html={highlightKeywords(paragraph)} />
+              ))}
+            </div>
+            <figure class="guild__avatar ornate-frame">
+              <img
+                src="/images/avatar_guillaume.png"
+                alt="Portrait illustré de Guillaume Moultson"
+                width="400"
+                height="400"
+                loading="lazy"
+              />
+            </figure>
           </div>
-          <div class="guild__panel ornate-frame" data-reveal="right">
-            <h3 class="guild__panel-title">Stack & outils</h3>
-            <ul class="guild__list">
-              <li><span>·</span> Symfony 6+ / PHP 8</li>
-              <li><span>·</span> APIs REST & intégrations tierces</li>
-              <li><span>·</span> Java / Spring Boot</li>
-              <li><span>·</span> Docker / DDEV / CI</li>
-              <li><span>·</span> PostgreSQL / MySQL</li>
-              <li><span>·</span> Elasticsearch / OpenSearch</li>
-            </ul>
-            <div class="guild__interests">
-              <p class="guild__interests-label">Passions</p>
+
+          <div class="guild__passions">
+            <h3 class="guild__passions-title">Passions</h3>
+            <div class="guild__passions-tags">
               <span class="stack-tag">Jeux vidéo</span>
               <span class="stack-tag">Montage PC</span>
               <span class="stack-tag">Moto</span>
@@ -437,15 +442,32 @@ const pillars = [
   }
 
   .guild__layout {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .guild__layout .section-title {
+    margin-bottom: 1.75rem;
+  }
+
+  .guild__row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(2rem, 5vw, 4rem);
+    grid-template-columns: 1fr minmax(220px, 300px);
+    gap: clamp(1.75rem, 4vw, 3rem);
     align-items: start;
+    margin-bottom: 1.75rem;
   }
 
   .guild__text p {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.1rem;
     color: var(--parchment-dark);
+    line-height: 1.75;
+    font-size: 1.02rem;
+  }
+
+  .guild__text p:last-child {
+    margin-bottom: 0;
   }
 
   .guild__text :global(.kw) {
@@ -453,48 +475,45 @@ const pillars = [
     font-weight: 600;
   }
 
-  .guild__panel-title {
-    font-size: 1.4rem;
-    color: var(--gold-bright);
-    margin-bottom: 1.25rem;
+  .guild__avatar {
+    padding: 0;
+    overflow: hidden;
+    margin: 0;
+    border-color: rgba(45, 212, 191, 0.45);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.35),
+      0 0 28px rgba(45, 212, 191, 0.1);
   }
 
-  .guild__list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.65rem;
-    margin-bottom: 1.5rem;
+  .guild__avatar img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    object-position: center 15%;
   }
 
-  .guild__list li {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    color: var(--parchment-dark);
+  .guild__passions {
+    margin-top: 0.5rem;
   }
 
-  .guild__list span {
-    color: var(--gold);
+  .guild__passions-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--parchment);
+    letter-spacing: -0.01em;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--teal-bright);
+    width: fit-content;
+    margin-bottom: 1rem;
   }
 
-  .guild__interests {
+  .guild__passions-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
-    align-items: center;
-  }
-
-  .guild__interests-label {
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--gold);
-    width: 100%;
-    margin-bottom: 0.25rem;
+    gap: 0.45rem;
   }
 
   .contact__box {
@@ -578,8 +597,14 @@ const pillars = [
       grid-template-columns: 1fr;
     }
 
-    .guild__layout {
+    .guild__row {
       grid-template-columns: 1fr;
+    }
+
+    .guild__avatar {
+      max-width: 280px;
+      margin-inline: auto;
+      order: -1;
     }
 
     .contact__fields {
