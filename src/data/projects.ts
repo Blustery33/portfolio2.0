@@ -1,6 +1,6 @@
 import { social } from './social';
 
-export type ProjectBadge = 'pro' | 'perso' | 'en-cours';
+export type ProjectType = 'pro' | 'perso';
 
 export interface ProjectImage {
   src: string;
@@ -12,8 +12,9 @@ export interface Project {
   slug: string;
   title: string;
   subtitle: string;
-  badge: ProjectBadge;
-  badgeLabel: string;
+  type: ProjectType;
+  typeLabel: 'Professionnel' | 'Personnel';
+  meta?: string;
   teaser: string;
   stack: string[];
   challenge: string;
@@ -31,8 +32,9 @@ export const projects: Project[] = [
     slug: 'zaap-gg',
     title: 'Zaap.gg',
     subtitle: 'Hub communautaire LFG pour joueurs Dofus',
-    badge: 'en-cours',
-    badgeLabel: 'En cours · Perso',
+    type: 'perso',
+    typeLabel: 'Personnel',
+    meta: 'En cours de développement',
     teaser:
       'Mise en relation entre joueurs PvM pour donjons et succès : annonces, candidatures, chat et notifications.',
     stack: ['Symfony', 'Next.js', 'PostgreSQL', 'Docker'],
@@ -87,24 +89,40 @@ export const projects: Project[] = [
     slug: 'yacht-charter',
     title: 'Dream Yacht Charter',
     subtitle: 'Plateforme de réservation yacht charter',
-    badge: 'pro',
-    badgeLabel: 'Pro · Programisto',
+    type: 'pro',
+    typeLabel: 'Professionnel',
+    meta: 'Programisto · client Dream Yacht Charter',
     teaser:
       'Développement back-end et front-end pour la plateforme de réservation de croisières en yacht.',
-    stack: ['PHP', 'Elasticsearch', 'JavaScript', 'Docker'],
+    stack: ['PHP', 'OpenSearch', 'JavaScript', 'vanillaCalendar', 'Docker'],
     challenge:
       'Optimiser la recherche de yachts à travers un catalogue volumineux avec filtres avancés, pagination performante et tunnel de réservation fluide.',
     backend: [
       'Architecture PHP orientée services (SOA)',
-      'Requêtes Elasticsearch / OpenSearch optimisées',
+      'Requêtes OpenSearch optimisées pour la recherche et le filtrage',
       'Intégrations API tierces (Nausys, HubSpot, Gravity Forms)',
       'Environnement Docker / DDEV, méthode Agile (Jira)',
     ],
     built: [
-      'Développement des endpoints de recherche et filtrage Elasticsearch',
+      'Refonte de la barre de recherche : vanillaCalendar côté front, logique de disponibilités branchée sur OpenSearch',
+      'Refonte de la page listing : filtres front & back unifiés et connectés à OpenSearch',
       'Modules back-end pour le tunnel de réservation',
       'Connexion aux APIs Nausys et HubSpot pour la synchronisation des données',
       'Optimisation des performances de requêtes sur catalogue volumineux',
+    ],
+    images: [
+      {
+        src: '/images/images-projets/dreamyacht/search_bar_dream_yacht.png',
+        alt: 'Barre de recherche Dream Yacht Worldwide avec calendrier de sélection de dates',
+        caption:
+          'Barre de recherche — refonte complète avec vanillaCalendar et back OpenSearch',
+      },
+      {
+        src: '/images/images-projets/dreamyacht/listing_page_dream_yacht.png',
+        alt: 'Page listing Dream Yacht avec filtres latéraux et résultats de charters',
+        caption:
+          'Listing — refonte complète des filtres front & back branchés à OpenSearch',
+      },
     ],
     links: [
       { label: 'GitHub', url: social.github },
@@ -115,8 +133,9 @@ export const projects: Project[] = [
     slug: 'youschool-crm',
     title: 'YouSchool CRM',
     subtitle: 'Interface de gestion d\'utilisateurs',
-    badge: 'pro',
-    badgeLabel: 'Pro · YouSchool',
+    type: 'pro',
+    typeLabel: 'Professionnel',
+    meta: 'YouSchool',
     teaser:
       'Back-office CRM pour le suivi des apprenants : gestion des profils, données métier et interface dynamique.',
     stack: ['Symfony', 'PHP', 'Twig', 'MySQL'],

@@ -3,84 +3,233 @@ import type { Project } from '../data/projects';
 
 interface Props {
   project: Project;
-  index: number;
 }
 
-const { project, index } = Astro.props;
-const badgeClass = `badge--${project.badge}`;
+const { project } = Astro.props;
+const typeBadge = project.type === 'pro' ? 'Pro' : 'Perso';
 ---
 
-<article class="quest-card ornate-frame" data-reveal style={`transition-delay: ${index * 0.1}s`}>
-  <div class="quest-card__header">
-    <span class={`badge ${badgeClass}`}>{project.badgeLabel}</span>
-    <span class="quest-card__num">Projet {String(index + 1).padStart(2, '0')}</span>
+<article class={`quest-card ornate-frame quest-card--${project.type}`} data-reveal>
+  <span class="quest-card__stripe" aria-hidden="true"></span>
+  <span class="quest-card__badge">{typeBadge}</span>
+
+  <div class="quest-card__body">
+    <h3 class="quest-card__title">{project.title}</h3>
+
+    {project.meta && <p class="quest-card__meta">{project.meta}</p>}
+
+    <p class="quest-card__subtitle">{project.subtitle}</p>
+    <p class="quest-card__teaser">{project.teaser}</p>
+
+    <div class="quest-card__stack">
+      {project.stack.map((tech) => (
+        <span class="stack-tag">{tech}</span>
+      ))}
+    </div>
   </div>
-  <h3 class="quest-card__title">{project.title}</h3>
-  <p class="quest-card__subtitle">{project.subtitle}</p>
-  <p class="quest-card__teaser">{project.teaser}</p>
-  <div class="quest-card__stack">
-    {project.stack.map((tech) => (
-      <span class="stack-tag">{tech}</span>
-    ))}
-  </div>
-  <a href={`/projets/${project.slug}`} class="btn quest-card__cta">
-    Voir le projet →
-  </a>
+
+  <footer class="quest-card__foot">
+    <a href={`/projets/${project.slug}`} class="btn quest-card__cta">
+      Voir le projet →
+    </a>
+  </footer>
 </article>
 
 <style>
   .quest-card {
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 0.85rem;
+    height: 100%;
+    padding: 0;
+    overflow: hidden;
     transition: transform 0.35s var(--ease-out), box-shadow 0.35s;
   }
 
+  .quest-card__stripe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .quest-card--pro .quest-card__stripe {
+    background: linear-gradient(180deg, var(--teal-bright) 0%, var(--teal-dim) 100%);
+    box-shadow: 0 0 16px var(--glow-teal);
+  }
+
+  .quest-card--perso .quest-card__stripe {
+    background: linear-gradient(180deg, var(--orange-bright) 0%, var(--orange) 100%);
+    box-shadow: 0 0 16px var(--glow-orange);
+  }
+
+  .quest-card.ornate-frame.quest-card--pro {
+    background: linear-gradient(
+      155deg,
+      rgba(45, 212, 191, 0.12) 0%,
+      var(--ink-soft) 38%,
+      var(--ink-mid) 100%
+    );
+    border-color: rgba(45, 212, 191, 0.45);
+  }
+
+  .quest-card.ornate-frame.quest-card--perso {
+    background: linear-gradient(
+      155deg,
+      rgba(255, 140, 66, 0.11) 0%,
+      rgba(45, 212, 191, 0.05) 30%,
+      var(--ink-mid) 100%
+    );
+    border-color: rgba(255, 140, 66, 0.35);
+  }
+
   .quest-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px var(--shadow), 0 0 24px rgba(45, 212, 191, 0.12);
+    transform: translateY(-5px);
   }
 
-  .quest-card__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .quest-card--pro:hover {
+    box-shadow: 0 14px 44px var(--shadow), 0 0 32px rgba(45, 212, 191, 0.18);
   }
 
-  .quest-card__num {
+  .quest-card--perso:hover {
+    box-shadow: 0 14px 44px var(--shadow), 0 0 32px rgba(255, 140, 66, 0.15);
+  }
+
+  .quest-card__badge {
+    position: absolute;
+    top: 1.1rem;
+    right: 1.15rem;
     font-family: var(--font-mono);
-    font-size: 0.68rem;
-    color: var(--gold);
-    opacity: 0.6;
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0.22rem 0.5rem;
+    border-radius: 2px;
+    opacity: 0.75;
+    z-index: 2;
+  }
+
+  .quest-card--pro .quest-card__badge {
+    color: var(--teal-bright);
+    background: rgba(45, 212, 191, 0.1);
+    border: 1px solid rgba(45, 212, 191, 0.3);
+  }
+
+  .quest-card--perso .quest-card__badge {
+    color: var(--orange-bright);
+    background: rgba(232, 93, 32, 0.12);
+    border: 1px solid rgba(255, 140, 66, 0.35);
+  }
+
+  .quest-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.5rem 1.5rem 1rem;
+    padding-right: 3.5rem;
+    flex: 1;
   }
 
   .quest-card__title {
-    font-size: 1.8rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.45rem, 2.5vw, 1.75rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    padding-bottom: 0.55rem;
+    border-bottom: 2px solid transparent;
+  }
+
+  .quest-card--pro .quest-card__title {
     color: var(--teal-bright);
+    border-image: linear-gradient(90deg, var(--teal-bright), transparent) 1;
+  }
+
+  .quest-card--perso .quest-card__title {
+    background: linear-gradient(110deg, var(--orange-bright) 0%, #f4c97a 45%, var(--teal-bright) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    border-image: linear-gradient(90deg, var(--orange-bright), var(--teal-bright), transparent) 1;
+  }
+
+  .quest-card__meta {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    color: var(--parchment-dark);
+    line-height: 1.4;
+    margin-top: -0.15rem;
   }
 
   .quest-card__subtitle {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    color: var(--parchment-dark);
-    letter-spacing: 0.04em;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--parchment);
+    line-height: 1.45;
   }
 
   .quest-card__teaser {
-    color: var(--parchment);
-    opacity: 0.85;
+    font-size: 0.9rem;
+    color: var(--parchment-dark);
+    line-height: 1.65;
     flex: 1;
-    font-size: 0.95rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 4.45rem;
   }
 
   .quest-card__stack {
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;
+    padding-top: 0.45rem;
+    min-height: 2.75rem;
+    align-content: flex-start;
+  }
+
+  .quest-card--pro .quest-card__stack :global(.stack-tag) {
+    background: rgba(45, 212, 191, 0.16);
+    border-color: rgba(45, 212, 191, 0.45);
+    color: #7ee8d8;
+  }
+
+  .quest-card--perso .quest-card__stack :global(.stack-tag) {
+    background: rgba(255, 140, 66, 0.14);
+    border-color: rgba(255, 140, 66, 0.42);
+    color: #ffc48a;
+  }
+
+  .quest-card__foot {
+    padding: 0 1.5rem 1.5rem;
+    margin-top: auto;
   }
 
   .quest-card__cta {
-    align-self: flex-start;
-    margin-top: 0.5rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .quest-card--pro .quest-card__cta:hover {
+    background: rgba(45, 212, 191, 0.18);
+    border-color: var(--teal-bright);
+    box-shadow: 0 0 22px var(--glow-teal);
+  }
+
+  .quest-card--perso .quest-card__cta {
+    border-color: rgba(255, 140, 66, 0.5);
+    color: var(--orange-bright);
+  }
+
+  .quest-card--perso .quest-card__cta:hover {
+    background: rgba(232, 93, 32, 0.15);
+    border-color: var(--orange-bright);
+    color: var(--parchment);
+    box-shadow: 0 0 22px var(--glow-orange);
   }
 </style>

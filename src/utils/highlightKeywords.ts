@@ -7,6 +7,7 @@ const KEYWORDS = [
   'Express.js',
   'Spring Boot',
   'Live Components',
+  'vanillaCalendar',
   'OpenSearch',
   'Elasticsearch',
   'PostgreSQL',

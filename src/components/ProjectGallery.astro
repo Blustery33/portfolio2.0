@@ -1,0 +1,302 @@
+---
+import type { ProjectImage } from '../data/projects';
+
+interface Props {
+  images: ProjectImage[];
+}
+
+const { images } = Astro.props;
+---
+
+<section class="project__gallery" data-reveal>
+  <h2 class="project__section-title">Aperçu</h2>
+  <p class="project__gallery-hint">Cliquez sur une capture pour l’agrandir</p>
+  <div class="project__gallery-grid">
+    {images.map((image) => (
+      <figure class="project__figure ornate-frame">
+        <button
+          type="button"
+          class="project__figure-btn"
+          data-lightbox-trigger
+          data-src={image.src}
+          data-alt={image.alt}
+          data-caption={image.caption}
+          aria-label={`Agrandir : ${image.caption}`}
+        >
+          <img
+            src={image.src}
+            alt={image.alt}
+            loading="lazy"
+            width="1200"
+            height="675"
+          />
+          <span class="project__figure-zoom" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="7" />
+              <path d="M21 21l-4.35-4.35M11 8v6M8 11h6" />
+            </svg>
+          </span>
+        </button>
+        <figcaption>{image.caption}</figcaption>
+      </figure>
+    ))}
+  </div>
+</section>
+
+<dialog class="lightbox" id="project-lightbox" aria-label="Aperçu agrandi">
+  <button type="button" class="lightbox__close" aria-label="Fermer" data-lightbox-close>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 6L6 18M6 6l12 12" />
+    </svg>
+  </button>
+  <figure class="lightbox__inner">
+    <img class="lightbox__img" src="" alt="" />
+    <figcaption class="lightbox__caption"></figcaption>
+  </figure>
+</dialog>
+
+<script>
+  function initProjectLightbox() {
+    const dialog = document.getElementById('project-lightbox') as HTMLDialogElement | null;
+    if (!dialog) return;
+
+    const img = dialog.querySelector('.lightbox__img') as HTMLImageElement;
+    const caption = dialog.querySelector('.lightbox__caption') as HTMLElement;
+
+    const open = (src: string, alt: string, cap: string) => {
+      img.src = src;
+      img.alt = alt;
+      caption.textContent = cap;
+      dialog.showModal();
+      document.body.style.overflow = 'hidden';
+    };
+
+    const close = () => {
+      dialog.close();
+      document.body.style.overflow = '';
+      img.removeAttribute('src');
+    };
+
+    document.querySelectorAll('[data-lightbox-trigger]').forEach((trigger) => {
+      trigger.addEventListener('click', () => {
+        const el = trigger as HTMLElement;
+        open(el.dataset.src ?? '', el.dataset.alt ?? '', el.dataset.caption ?? '');
+      });
+    });
+
+    dialog.querySelectorAll('[data-lightbox-close]').forEach((btn) => {
+      btn.addEventListener('click', close);
+    });
+
+    dialog.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target === dialog || target.classList.contains('lightbox__img')) close();
+    });
+
+    dialog.addEventListener('close', () => {
+      document.body.style.overflow = '';
+    });
+  }
+
+  initProjectLightbox();
+  document.addEventListener('astro:page-load', initProjectLightbox);
+</script>
+
+<style>
+  .project__gallery {
+    margin-bottom: 1.75rem;
+  }
+
+  .project__gallery :global(.project__section-title) {
+    margin-bottom: 0.5rem;
+  }
+
+  .project__gallery-hint {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--parchment-dark);
+    opacity: 0.75;
+    margin: 0 0 1.25rem;
+  }
+
+  .project__gallery-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .project__figure {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .project__figure-btn {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: zoom-in;
+    line-height: 0;
+  }
+
+  .project__figure-btn img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-bottom: 1px solid rgba(45, 212, 191, 0.15);
+    transition: transform 0.4s var(--ease-out), filter 0.35s;
+  }
+
+  .project__figure-btn:hover img,
+  .project__figure-btn:focus-visible img {
+    transform: scale(1.02);
+    filter: brightness(1.08);
+  }
+
+  .project__figure-btn:focus-visible {
+    outline: 2px solid var(--teal-bright);
+    outline-offset: -2px;
+  }
+
+  .project__figure-zoom {
+    position: absolute;
+    bottom: 0.85rem;
+    right: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background: rgba(21, 28, 38, 0.82);
+    border: 1px solid rgba(45, 212, 191, 0.45);
+    color: var(--teal-bright);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.3s, transform 0.3s var(--ease-out);
+    pointer-events: none;
+  }
+
+  .project__figure-btn:hover .project__figure-zoom,
+  .project__figure-btn:focus-visible .project__figure-zoom {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .project__figure figcaption {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    color: var(--parchment-dark);
+    padding: 0.85rem 1.15rem;
+  }
+
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: 2rem;
+    border: none;
+    background: transparent;
+    overflow: visible;
+  }
+
+  .lightbox::backdrop {
+    background: rgba(8, 12, 18, 0.88);
+    backdrop-filter: blur(8px);
+  }
+
+  .lightbox[open] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: lightbox-in 0.3s var(--ease-out);
+  }
+
+  @keyframes lightbox-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .lightbox__close {
+    position: fixed;
+    top: 1.25rem;
+    right: 1.25rem;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 1px solid rgba(45, 212, 191, 0.4);
+    border-radius: 50%;
+    background: rgba(21, 28, 38, 0.9);
+    color: var(--teal-bright);
+    cursor: pointer;
+    transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
+  }
+
+  .lightbox__close:hover,
+  .lightbox__close:focus-visible {
+    background: rgba(45, 212, 191, 0.15);
+    border-color: var(--teal-bright);
+    box-shadow: 0 0 20px var(--glow-teal);
+    outline: none;
+  }
+
+  .lightbox__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.85rem;
+    max-width: min(1200px, 95vw);
+    max-height: 90vh;
+    margin: 0;
+    animation: lightbox-img-in 0.35s var(--ease-out);
+  }
+
+  @keyframes lightbox-img-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .lightbox__img {
+    display: block;
+    max-width: 100%;
+    max-height: calc(90vh - 3rem);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border: var(--border-ornate);
+    border-radius: 2px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+    cursor: zoom-out;
+  }
+
+  .lightbox__caption {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    color: var(--parchment-dark);
+    text-align: center;
+    max-width: 60ch;
+  }
+</style>

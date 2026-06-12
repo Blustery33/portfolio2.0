@@ -4,6 +4,7 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { projects, getProject } from '../../data/projects';
 import { highlightKeywords } from '../../utils/highlightKeywords';
+import ProjectGallery from '../../components/ProjectGallery.astro';
 
 export function getStaticPaths() {
   return projects.map((project) => ({
@@ -13,7 +14,8 @@ export function getStaticPaths() {
 }
 
 const { project } = Astro.props;
-const badgeClass = `badge--${project.badge}`;
+const typeBadge = project.type === 'pro' ? 'Pro' : 'Perso';
+const typeClass = `project__header--${project.type}`;
 ---
 
 <Layout
@@ -27,11 +29,12 @@ const badgeClass = `badge--${project.badge}`;
     <article class="container project">
       <a href="/#projets" class="project__back btn">← Retour aux projets</a>
 
-      <header class="project__header" data-reveal>
-        <div class="project__meta">
-          <span class={`badge ${badgeClass}`}>{project.badgeLabel}</span>
+      <header class={`project__header ${typeClass}`} data-reveal>
+        <div class="project__title-row">
+          <h1 class="project__title">{project.title}</h1>
+          <span class="project__badge">{typeBadge}</span>
         </div>
-        <h1 class="project__title">{project.title}</h1>
+        {project.meta && <p class="project__meta">{project.meta}</p>}
         <p class="project__subtitle">{project.subtitle}</p>
         <div class="project__stack">
           {project.stack.map((tech) => (
@@ -60,26 +63,6 @@ const badgeClass = `badge--${project.badge}`;
         </section>
       )}
 
-      {project.images && (
-        <section class="project__gallery" data-reveal>
-          <h2 class="project__section-title">Aperçu</h2>
-          <div class="project__gallery-grid">
-            {project.images.map((image) => (
-              <figure class="project__figure ornate-frame">
-                <img
-                  src={image.src}
-                  alt={image.alt}
-                  loading="lazy"
-                  width="1200"
-                  height="675"
-                />
-                <figcaption>{image.caption}</figcaption>
-              </figure>
-            ))}
-          </div>
-        </section>
-      )}
-
       <section class="project__section ornate-frame" data-reveal>
         <h2 class="project__section-title">Back-end</h2>
         <ul class="project__list">
@@ -97,6 +80,8 @@ const badgeClass = `badge--${project.badge}`;
           ))}
         </ul>
       </section>
+
+      {project.images && <ProjectGallery images={project.images} />}
 
       <footer class="project__footer" data-reveal>
         <div class="project__links">
@@ -148,37 +133,6 @@ const badgeClass = `badge--${project.badge}`;
     border-radius: 2px;
   }
 
-  .project__gallery {
-    margin-bottom: 1.75rem;
-  }
-
-  .project__gallery-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    margin-top: 1.25rem;
-  }
-
-  .project__figure {
-    padding: 0;
-    overflow: hidden;
-  }
-
-  .project__figure img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-bottom: 1px solid rgba(45, 212, 191, 0.15);
-  }
-
-  .project__figure figcaption {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.06em;
-    color: var(--parchment-dark);
-    padding: 0.85rem 1.15rem;
-  }
-
   .project__back {
     margin-bottom: 2.5rem;
     font-size: 0.72rem;
@@ -188,10 +142,70 @@ const badgeClass = `badge--${project.badge}`;
     margin-bottom: 2.5rem;
   }
 
+  .project__title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
   .project__title {
-    font-size: clamp(2.5rem, 7vw, 4rem);
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 6vw, 2.75rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 0;
+    padding-bottom: 0.65rem;
+    border-bottom: 2px solid transparent;
+  }
+
+  .project__header--pro .project__title {
     color: var(--teal-bright);
-    margin: 0.75rem 0 0.5rem;
+    border-image: linear-gradient(90deg, var(--teal-bright), transparent) 1;
+  }
+
+  .project__header--perso .project__title {
+    background: linear-gradient(110deg, var(--orange-bright) 0%, #f4c97a 45%, var(--teal-bright) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    border-image: linear-gradient(90deg, var(--orange-bright), var(--teal-bright), transparent) 1;
+  }
+
+  .project__badge {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0.28rem 0.55rem;
+    border-radius: 2px;
+    margin-top: 0.35rem;
+    opacity: 0.8;
+  }
+
+  .project__header--pro .project__badge {
+    color: var(--teal-bright);
+    background: rgba(45, 212, 191, 0.1);
+    border: 1px solid rgba(45, 212, 191, 0.3);
+  }
+
+  .project__header--perso .project__badge {
+    color: var(--orange-bright);
+    background: rgba(232, 93, 32, 0.12);
+    border: 1px solid rgba(255, 140, 66, 0.35);
+  }
+
+  .project__meta {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.03em;
+    color: var(--parchment-dark);
+    line-height: 1.45;
+    margin-bottom: 0.35rem;
   }
 
   .project__subtitle {

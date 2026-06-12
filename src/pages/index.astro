@@ -4,8 +4,8 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { getFeaturedProjects } from '../data/projects';
-import { skills } from '../data/skills';
-import SkillTile from '../components/SkillTile.astro';
+import { skillGroups } from '../data/skills';
+import SkillsShowcase from '../components/SkillsShowcase.astro';
 import { social } from '../data/social';
 import { highlightKeywords } from '../utils/highlightKeywords';
 
@@ -100,11 +100,7 @@ const pillars = [
           Mon socle technique au quotidien : back-end, APIs, données et outils
           avec lesquels je construis et maintiens des applications en production.
         </p>
-        <div class="skills__grid">
-          {skills.map((skill, i) => (
-            <SkillTile skill={skill} index={i} />
-          ))}
-        </div>
+        <SkillsShowcase groups={skillGroups} />
       </div>
     </section>
 
@@ -119,7 +115,7 @@ const pillars = [
         </p>
         <div class="quests__grid">
           {featuredProjects.map((project, i) => (
-            <ProjectCard project={project} index={i} />
+            <ProjectCard project={project} />
           ))}
         </div>
       </div>
@@ -421,12 +417,6 @@ const pillars = [
     line-height: 1.75;
   }
 
-  .skills__grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.25rem;
-  }
-
   .quests__intro {
     max-width: 560px;
     color: var(--parchment-dark);
@@ -435,8 +425,15 @@ const pillars = [
 
   .quests__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
+    align-items: stretch;
     gap: 1.75rem;
+  }
+
+  @media (max-width: 900px) {
+    .quests__grid {
+      grid-template-columns: 1fr;
+    }
   }
 
   .guild__layout {
@@ -577,10 +574,6 @@ const pillars = [
   }
 
   @media (max-width: 768px) {
-    .skills__grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
     .pillars__grid {
       grid-template-columns: 1fr;
     }
@@ -594,9 +587,4 @@ const pillars = [
     }
   }
 
-  @media (max-width: 420px) {
-    .skills__grid {
-      grid-template-columns: 1fr;
-    }
-  }
 </style>
